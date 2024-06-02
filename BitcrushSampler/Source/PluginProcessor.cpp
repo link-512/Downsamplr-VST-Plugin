@@ -22,6 +22,14 @@ BitcrushSamplerAudioProcessor::BitcrushSamplerAudioProcessor()
                        )
 #endif
 {
+    formatManager.registerBasicFormats();       //Registers Basic Audio Formats
+    
+    for (int i = 0; i < numVoices; i++)         //Adds Voices to sampleSynth
+    {
+        sampleSynth.addVoice(new juce::SamplerVoice);
+    }
+
+    range.setRange(0, 128, true);       //Sets Midi Range
 }
 
 BitcrushSamplerAudioProcessor::~BitcrushSamplerAudioProcessor()
@@ -95,6 +103,8 @@ void BitcrushSamplerAudioProcessor::prepareToPlay (double sampleRate, int sample
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+
+    sampleSynth.setCurrentPlaybackSampleRate(sampleRate);     //Sets sample rate for sampler
 }
 
 void BitcrushSamplerAudioProcessor::releaseResources()
@@ -150,12 +160,17 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
+    /*
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         auto* channelData = buffer.getWritePointer (channel);
 
         // ..do something to the data...
     }
+    */
+
+
+    sampleSynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());       //Renders data with sampleSynth
 }
 
 //==============================================================================
@@ -188,4 +203,21 @@ void BitcrushSamplerAudioProcessor::setStateInformation (const void* data, int s
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new BitcrushSamplerAudioProcessor();
+}
+
+//Loads A file when prompted by button
+void BitcrushSamplerAudioProcessor::loadFile()
+{
+    sampleSynth.clearSounds();      //Clears all previous sounds
+
+    juce::FileChooser chooser{ "Select File" };
+
+    if (chooser.browseForFileToOpen())      //Opens File Explorer for file
+    {
+        auto file = chooser.getResult();
+
+        formatReader = formatManager.createReaderFor(file);
+        sampleSynth.addSound(new juce::SamplerSound("Sample", *formatReader, range, 60, 0.1, 0.1, 10.0));
+    }
+    
 }

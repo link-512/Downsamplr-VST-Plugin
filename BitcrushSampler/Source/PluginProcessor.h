@@ -53,7 +53,27 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+
+
+
+    //File Reading and Playback
+    void loadFile();    //Manual Button File Loading
+
 private:
     //==============================================================================
+
+
+    //File Reading and Playback
+    juce::Synthesiser sampleSynth;      //Synth for audio playback
+    const int numVoices = { 5 };        //Number of voices within synth
+    juce::AudioFormatManager formatManager;  //Format Manager for reading files
+    juce::AudioFormatReader* formatReader{ nullptr };       //Format Reader for reading files
+    juce::BigInteger range; //Midi Range
+
+
+
+    //Audio Processor Value Tree State
+    //juce::AudioProcessorValueTreeState APVTS;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BitcrushSamplerAudioProcessor)
 };

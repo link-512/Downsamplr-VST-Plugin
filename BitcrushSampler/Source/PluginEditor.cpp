@@ -13,9 +13,12 @@
 BitcrushSamplerAudioProcessorEditor::BitcrushSamplerAudioProcessorEditor (BitcrushSamplerAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    //Manual Load Button
+    manualLoad.onClick = [&]() {audioProcessor.loadFile(); };
+    addAndMakeVisible(manualLoad);
+
+
+    setSize (1000, 500);
 }
 
 BitcrushSamplerAudioProcessorEditor::~BitcrushSamplerAudioProcessorEditor()
@@ -26,15 +29,10 @@ BitcrushSamplerAudioProcessorEditor::~BitcrushSamplerAudioProcessorEditor()
 void BitcrushSamplerAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
-    g.setColour (juce::Colours::white);
-    g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+    g.fillAll (juce::Colours::black);
 }
 
 void BitcrushSamplerAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    manualLoad.setBounds(0, 0, 100, 100);
 }

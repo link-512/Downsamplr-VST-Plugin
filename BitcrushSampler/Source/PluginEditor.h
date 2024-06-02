@@ -29,5 +29,10 @@ private:
     // access the processor object that created it.
     BitcrushSamplerAudioProcessor& audioProcessor;
 
+
+
+    //File Loading
+    juce::TextButton manualLoad{ "Load" };
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BitcrushSamplerAudioProcessorEditor)
 };
