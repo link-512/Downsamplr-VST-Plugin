@@ -170,6 +170,27 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     */
 
 
+    // PlayHead
+    juce::MidiMessage m;
+    juce::MidiBuffer::Iterator it{ midiMessages };
+    int sample;
+
+    while (it.getNextEvent(m, sample))
+    {
+        if (m.isNoteOn())
+        {
+            mIsNotePlayed = true;
+        }
+
+        else if (m.isNoteOff())
+        {
+            mIsNotePlayed = false;
+        }
+    }
+
+    mSampleCount = mIsNotePlayed ? mSampleCount += buffer.getNumSamples() : 0;
+
+
     sampleSynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());       //Renders data with sampleSynth
 }
 
@@ -220,4 +241,26 @@ void BitcrushSamplerAudioProcessor::loadFile()
         sampleSynth.addSound(new juce::SamplerSound("Sample", *formatReader, range, 60, 0.1, 0.1, 10.0));
     }
     
+}
+
+//Loads a file when a new file is dragged
+void BitcrushSamplerAudioProcessor::loadFile(const juce::String& path)
+{
+    sampleSynth.clearSounds();
+
+    auto file = juce::File(path);
+
+    formatReader = formatManager.createReaderFor(file);
+
+
+    //Creates buffer for waveform data
+    waveform.setSize(1, static_cast<int>(formatReader->lengthInSamples));
+    formatReader->read(&waveform, 0, static_cast<int>(formatReader->lengthInSamples), 0, true, false);
+
+    //juce::BigInteger range;
+    //range.setRange(0, 128, true);
+
+    sampleSynth.addSound(new juce::SamplerSound("Sample", *formatReader, range, 60, 0.1, 0.1, 10.0));
+
+    //updateADSR();
 }

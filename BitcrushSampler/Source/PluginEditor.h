@@ -10,11 +10,12 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "WaveThumbnail.h"
 
 //==============================================================================
 /**
 */
-class BitcrushSamplerAudioProcessorEditor  : public juce::AudioProcessorEditor
+class BitcrushSamplerAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::Timer
 {
 public:
     BitcrushSamplerAudioProcessorEditor (BitcrushSamplerAudioProcessor&);
@@ -24,10 +25,20 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
+
+
+    //File Drag and Drop
+    
+
+
+    //Playhead
+    void timerCallback() override;
+
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     BitcrushSamplerAudioProcessor& audioProcessor;
+    WaveThumbnail waveThumbnail;
 
 
 

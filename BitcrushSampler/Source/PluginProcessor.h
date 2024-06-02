@@ -58,6 +58,17 @@ public:
 
     //File Reading and Playback
     void loadFile();    //Manual Button File Loading
+    void loadFile(const juce::String& path);    //Drag and Drop File Loading
+
+
+    //Waveform Generation
+    int getNumSamplerSounds() { return sampleSynth.getNumSounds(); };
+    juce::AudioBuffer<float>& getWaveform() { return waveform; };
+
+
+    // Playhead
+    std::atomic<bool>& isNotePlayed() { return mIsNotePlayed; };
+    std::atomic<int>& getSampleCount() { return mSampleCount; };
 
 private:
     //==============================================================================
@@ -71,6 +82,14 @@ private:
     juce::BigInteger range; //Midi Range
 
 
+
+    //Waveform generation
+    juce::AudioBuffer<float> waveform;
+
+    //Playhead
+    std::atomic<bool> shouldUpdate{ false };
+    std::atomic<bool> mIsNotePlayed{ false };
+    std::atomic<int> mSampleCount{ 0 };
 
     //Audio Processor Value Tree State
     //juce::AudioProcessorValueTreeState APVTS;

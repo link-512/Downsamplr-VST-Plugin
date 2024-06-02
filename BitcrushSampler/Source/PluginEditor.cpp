@@ -11,12 +11,15 @@
 
 //==============================================================================
 BitcrushSamplerAudioProcessorEditor::BitcrushSamplerAudioProcessorEditor (BitcrushSamplerAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+    : AudioProcessorEditor (&p), waveThumbnail (p), audioProcessor (p)
 {
     //Manual Load Button
     manualLoad.onClick = [&]() {audioProcessor.loadFile(); };
     addAndMakeVisible(manualLoad);
 
+
+    //Waveform Preview
+    addAndMakeVisible(waveThumbnail);
 
     setSize (1000, 500);
 }
@@ -34,5 +37,14 @@ void BitcrushSamplerAudioProcessorEditor::paint (juce::Graphics& g)
 
 void BitcrushSamplerAudioProcessorEditor::resized()
 {
-    manualLoad.setBounds(0, 0, 100, 100);
+    manualLoad.setBounds(400, 0, 100, 100);
+    waveThumbnail.setBounds(0,0, 400, 200);
 }
+
+//Repaints for playhead movement
+void BitcrushSamplerAudioProcessorEditor::timerCallback()
+{
+    repaint();
+}
+
+
