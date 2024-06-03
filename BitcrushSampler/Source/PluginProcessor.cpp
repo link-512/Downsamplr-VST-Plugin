@@ -229,6 +229,7 @@ void BitcrushSamplerAudioProcessor::loadFile()
     if (chooser.browseForFileToOpen())      //Opens File Explorer for file
     {
         auto file = chooser.getResult();
+        fileName = file.getFileNameWithoutExtension();
 
         formatReader = formatManager.createReaderFor(file);
 
@@ -249,6 +250,7 @@ void BitcrushSamplerAudioProcessor::loadFile(const juce::String& path)
     sampleSynth.clearSounds();
 
     auto file = juce::File(path);
+    fileName = file.getFileNameWithoutExtension();
 
     formatReader = formatManager.createReaderFor(file);
 

@@ -78,6 +78,10 @@ void WaveThumbnail::paint (juce::Graphics& g)
 
     g.setColour(juce::Colours::white);
     g.setFont(15.0f);
+
+    auto textBounds = getLocalBounds().reduced(10, 10);
+
+    g.drawFittedText(audioProcessor.getSampleName(), textBounds, juce::Justification::topRight, 1);
 }
 
 void WaveThumbnail::resized()

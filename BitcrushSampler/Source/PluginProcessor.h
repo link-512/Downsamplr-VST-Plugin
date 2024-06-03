@@ -59,6 +59,7 @@ public:
     //File Reading and Playback
     void loadFile();    //Manual Button File Loading
     void loadFile(const juce::String& path);    //Drag and Drop File Loading
+    juce::String getSampleName() { return fileName; };  //Returns Name of File Sampled
 
 
     //Waveform Generation
@@ -89,6 +90,7 @@ private:
     juce::AudioFormatManager formatManager;  //Format Manager for reading files
     juce::AudioFormatReader* formatReader{ nullptr };       //Format Reader for reading files
     juce::BigInteger range; //Midi Range
+    juce::String fileName{ "" };  //Name of file being played
 
 
 
