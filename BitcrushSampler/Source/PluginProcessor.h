@@ -13,7 +13,7 @@
 //==============================================================================
 /**
 */
-class BitcrushSamplerAudioProcessor  : public juce::AudioProcessor
+class BitcrushSamplerAudioProcessor  : public juce::AudioProcessor, public juce::ValueTree::Listener
 {
 public:
     //==============================================================================
@@ -70,6 +70,15 @@ public:
     std::atomic<bool>& isNotePlayed() { return mIsNotePlayed; };
     std::atomic<int>& getSampleCount() { return mSampleCount; };
 
+
+    //ADSR Variables
+    void valueTreePropertyChanged(juce::ValueTree& treeWhosePropertyHasChanged, const juce::Identifier& property) override;
+    juce::ADSR::Parameters& getADSRParams() { return ADSRParams; };
+
+    void updateADSR();
+
+    juce::AudioProcessorValueTreeState& getAPVTS() { return APVTS; };
+
 private:
     //==============================================================================
 
@@ -92,7 +101,11 @@ private:
     std::atomic<int> mSampleCount{ 0 };
 
     //Audio Processor Value Tree State
-    //juce::AudioProcessorValueTreeState APVTS;
+    juce::AudioProcessorValueTreeState APVTS;
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
+
+    //ADSR
+    juce::ADSR::Parameters ADSRParams;     //Sampler Envelope Parameters
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BitcrushSamplerAudioProcessor)
 };

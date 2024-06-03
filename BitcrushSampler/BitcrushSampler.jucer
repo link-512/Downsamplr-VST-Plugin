@@ -6,19 +6,19 @@
               defines="JUCE_MODAL_LOOPS_PERMITTED=1">
   <MAINGROUP id="eORU56" name="BitcrushSampler">
     <GROUP id="{31F12366-A747-A99C-06BB-F02620C7616E}" name="Source">
+      <FILE id="S0RATq" name="ADSRKnobs.h" compile="0" resource="0" file="Source/ADSRKnobs.h"/>
+      <FILE id="xS4s3e" name="ADSRKnobs.cpp" compile="1" resource="0" file="Source/ADSRKnobs.cpp"/>
+      <FILE id="NNRE8Z" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="tMQvzu" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       <FILE id="PJprIn" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="oIfPay" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
-      <FILE id="NNRE8Z" name="PluginEditor.cpp" compile="1" resource="0"
-            file="Source/PluginEditor.cpp"/>
-      <FILE id="tMQvzu" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="jtnmTj" name="WaveThumbnail.cpp" compile="1" resource="0"
+            file="Source/WaveThumbnail.cpp"/>
+      <FILE id="KxInIp" name="WaveThumbnail.h" compile="0" resource="0" file="Source/WaveThumbnail.h"/>
     </GROUP>
-    <FILE id="xS4s3e" name="ADSRKnobs.cpp" compile="1" resource="0" file="Source/ADSRKnobs.cpp"/>
-    <FILE id="S0RATq" name="ADSRKnobs.h" compile="0" resource="0" file="Source/ADSRKnobs.h"/>
-    <FILE id="jtnmTj" name="WaveThumbnail.cpp" compile="1" resource="0"
-          file="Source/WaveThumbnail.cpp"/>
-    <FILE id="KxInIp" name="WaveThumbnail.h" compile="0" resource="0" file="Source/WaveThumbnail.h"/>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>

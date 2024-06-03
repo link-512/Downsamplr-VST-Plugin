@@ -26,7 +26,7 @@ ADSRKnobs::ADSRKnobs(BitcrushSamplerAudioProcessor & p) : audioProcessor (p)
     attackLabel.attachToComponent(&attackSlider, false);
     
 
-    //attackAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "ATTACK", attackSlider);
+    attackAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "ATTACK", attackSlider);
 
 
 
@@ -40,7 +40,7 @@ ADSRKnobs::ADSRKnobs(BitcrushSamplerAudioProcessor & p) : audioProcessor (p)
     decayLabel.setJustificationType(juce::Justification::centredTop);
     decayLabel.attachToComponent(&decaySlider, false);
 
-    //decayAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "DECAY", mDecaySlider);
+    decayAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "DECAY", decaySlider);
 
 
     sustainSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
@@ -54,7 +54,7 @@ ADSRKnobs::ADSRKnobs(BitcrushSamplerAudioProcessor & p) : audioProcessor (p)
     sustainLabel.attachToComponent(&sustainSlider, false);
 
 
-    //sustainAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "SUSTAIN", sustainSlider);
+    sustainAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "SUSTAIN", sustainSlider);
 
 
     releaseSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
@@ -68,7 +68,7 @@ ADSRKnobs::ADSRKnobs(BitcrushSamplerAudioProcessor & p) : audioProcessor (p)
     releaseLabel.attachToComponent(&releaseSlider, false);
 
 
-    //releaseAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "RELEASE", releaseSlider);
+    releaseAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "RELEASE", releaseSlider);
 
 }
 

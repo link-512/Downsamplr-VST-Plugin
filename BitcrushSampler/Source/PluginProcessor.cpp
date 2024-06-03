@@ -19,10 +19,11 @@ BitcrushSamplerAudioProcessor::BitcrushSamplerAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), APVTS(*this, nullptr, "PARAMETERS", createParameters())       //Creates APVTS
 #endif
 {
     formatManager.registerBasicFormats();       //Registers Basic Audio Formats
+    APVTS.state.addListener(this);             //APVTS Listener
     
     for (int i = 0; i < numVoices; i++)         //Adds Voices to sampleSynth
     {
@@ -154,20 +155,12 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    /*
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    //Updates ADSR when necessary
+    if (shouldUpdate)
     {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
+        updateADSR();
+        shouldUpdate = false;
     }
-    */
 
 
     // PlayHead
@@ -268,4 +261,41 @@ void BitcrushSamplerAudioProcessor::loadFile(const juce::String& path)
     sampleSynth.addSound(new juce::SamplerSound("Sample", *formatReader, range, 60, 0.1, 0.1, 10.0));
 
     //updateADSR();
+}
+
+void BitcrushSamplerAudioProcessor::updateADSR()       //Updates ADSR Values
+{
+    ADSRParams.attack = APVTS.getRawParameterValue("ATTACK")->load();
+    ADSRParams.decay = APVTS.getRawParameterValue("DECAY")->load();
+    ADSRParams.sustain = APVTS.getRawParameterValue("SUSTAIN")->load();
+    ADSRParams.release = APVTS.getRawParameterValue("RELEASE")->load();
+
+    //Iterates for ADSR Envelope
+    for (int i = 0; i < sampleSynth.getNumSounds(); ++i)
+    {
+        if (auto sound = dynamic_cast<juce::SamplerSound*>(sampleSynth.getSound(i).get()))
+        {
+            sound->setEnvelopeParameters(ADSRParams);
+        }
+    }
+}
+
+
+//Updates ADSR when knob value is changed
+void BitcrushSamplerAudioProcessor::valueTreePropertyChanged(juce::ValueTree& treeWhosePropertyHasChanged, const juce::Identifier& property)
+{
+    shouldUpdate = true;
+}
+
+//Creates ADSR Parameters
+juce::AudioProcessorValueTreeState::ParameterLayout BitcrushSamplerAudioProcessor::createParameters()
+{
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
+
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("ATTACK", "Attack", 0.0f, 5.0f, 0.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("DECAY", "Decay", 0.0f, 3.0f, 2.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("SUSTAIN", "Sustain", 0.0f, 1.0f, 1.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("RELEASE", "Release", 0.0f, 5.0f, 2.0f));
+
+    return { parameters.begin(), parameters.end() };
 }
