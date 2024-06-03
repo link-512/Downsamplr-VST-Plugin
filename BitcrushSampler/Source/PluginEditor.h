@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "WaveThumbnail.h"
+#include "ADSRKnobs.h"
 
 //==============================================================================
 /**
@@ -39,6 +40,7 @@ private:
     // access the processor object that created it.
     BitcrushSamplerAudioProcessor& audioProcessor;
     WaveThumbnail waveThumbnail;
+    ADSRKnobs adsrKnobs;
 
 
 

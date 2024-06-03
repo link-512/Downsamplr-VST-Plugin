@@ -14,6 +14,8 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="tMQvzu" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
+    <FILE id="xS4s3e" name="ADSRKnobs.cpp" compile="1" resource="0" file="Source/ADSRKnobs.cpp"/>
+    <FILE id="S0RATq" name="ADSRKnobs.h" compile="0" resource="0" file="Source/ADSRKnobs.h"/>
     <FILE id="jtnmTj" name="WaveThumbnail.cpp" compile="1" resource="0"
           file="Source/WaveThumbnail.cpp"/>
     <FILE id="KxInIp" name="WaveThumbnail.h" compile="0" resource="0" file="Source/WaveThumbnail.h"/>
