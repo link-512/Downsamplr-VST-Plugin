@@ -21,11 +21,16 @@ BitcrushSamplerAudioProcessorEditor::BitcrushSamplerAudioProcessorEditor (Bitcru
     //Waveform Preview
     addAndMakeVisible(waveThumbnail);
 
+
+    //Start Timer
+    startTimerHz(30);
+
     setSize (1000, 500);
 }
 
 BitcrushSamplerAudioProcessorEditor::~BitcrushSamplerAudioProcessorEditor()
 {
+    stopTimer();
 }
 
 //==============================================================================
