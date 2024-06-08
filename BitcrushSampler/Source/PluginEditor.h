@@ -12,6 +12,7 @@
 #include "PluginProcessor.h"
 #include "WaveThumbnail.h"
 #include "ADSRKnobs.h"
+#include "BitcrushUI.h"
 
 //==============================================================================
 /**
@@ -41,7 +42,7 @@ private:
     BitcrushSamplerAudioProcessor& audioProcessor;
     WaveThumbnail waveThumbnail;
     ADSRKnobs adsrKnobs;
-
+    BitcrushUI bitcrushUI;
 
 
     //File Loading

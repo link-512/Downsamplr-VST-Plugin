@@ -6,8 +6,10 @@
               defines="JUCE_MODAL_LOOPS_PERMITTED=1">
   <MAINGROUP id="eORU56" name="BitcrushSampler">
     <GROUP id="{31F12366-A747-A99C-06BB-F02620C7616E}" name="Source">
-      <FILE id="S0RATq" name="ADSRKnobs.h" compile="0" resource="0" file="Source/ADSRKnobs.h"/>
       <FILE id="xS4s3e" name="ADSRKnobs.cpp" compile="1" resource="0" file="Source/ADSRKnobs.cpp"/>
+      <FILE id="S0RATq" name="ADSRKnobs.h" compile="0" resource="0" file="Source/ADSRKnobs.h"/>
+      <FILE id="IocYDG" name="BitcrushUI.cpp" compile="1" resource="0" file="Source/BitcrushUI.cpp"/>
+      <FILE id="LoHDO4" name="BitcrushUI.h" compile="0" resource="0" file="Source/BitcrushUI.h"/>
       <FILE id="NNRE8Z" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="tMQvzu" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
