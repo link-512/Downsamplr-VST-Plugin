@@ -106,6 +106,10 @@ void BitcrushSamplerAudioProcessor::prepareToPlay (double sampleRate, int sample
     // initialisation that you need..
 
     sampleSynth.setCurrentPlaybackSampleRate(sampleRate);     //Sets sample rate for sampler
+    updateADSR();
+    bits = APVTS.getRawParameterValue("BIT")->load();
+    reductionFactor = APVTS.getRawParameterValue("SAMPLE")->load();
+    wetDryFactor = APVTS.getRawParameterValue("PRESENCE")->load();
 }
 
 void BitcrushSamplerAudioProcessor::releaseResources()
@@ -159,6 +163,9 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     if (shouldUpdate)
     {
         updateADSR();
+        bits = APVTS.getRawParameterValue("BIT")->load();
+        reductionFactor = APVTS.getRawParameterValue("SAMPLE")->load();
+        wetDryFactor = APVTS.getRawParameterValue("PRESENCE")->load();
         shouldUpdate = false;
     }
 
@@ -195,8 +202,6 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         auto* channelData = buffer.getWritePointer(channel);
 
         //Bit Reduction
-        bits = 2.0f;
-        wetDryFactor = 1.0f;
         totalPossibleLevels = 1 << bits;          //Finds total possible bit combinations given bit rate
         bitQuantization = 1.0f / static_cast<float>(totalPossibleLevels);    //Finds space between possible bit levels
 
@@ -341,6 +346,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout BitcrushSamplerAudioProcesso
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("DECAY", "Decay", 0.0f, 3.0f, 0.0f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("SUSTAIN", "Sustain", 0.0f, 1.0f, 1.0f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("RELEASE", "Release", 0.0f, 5.0f, 0.01f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("BIT", "Bit Rate", 1.0f, 31.999f, 31.999f));
+    parameters.push_back(std::make_unique<juce::AudioParameterInt>("SAMPLE", "Sample Reduction", 1, 50, 1));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("PRESENCE", "Presence", 0.0f, 1.0f, 1.0f));
 
     return { parameters.begin(), parameters.end() };
 }

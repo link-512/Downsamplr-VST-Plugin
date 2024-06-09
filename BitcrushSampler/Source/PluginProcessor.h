@@ -111,12 +111,12 @@ private:
 
     
     //Bit Reduction
-    int bits = 2.0f;       //Simulated Bit Level
+    int bits;       //Simulated Bit Level
     int totalPossibleLevels;        //Total Possible values where a sample can be playing at a moment
     float bitQuantization;          //Value used to quantize incoming sample rate into simulated bit level
 
     //Sample Rate Reduction
-    int reductionFactor = 1;        //Reduction factor of how much sample rate is reduced
+    int reductionFactor;        //Reduction factor of how much sample rate is reduced
 
 
     //Wet Dry Mix
