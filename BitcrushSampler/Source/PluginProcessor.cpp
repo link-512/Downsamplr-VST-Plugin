@@ -185,6 +185,49 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
 
 
     sampleSynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());       //Renders data with sampleSynth
+    
+
+
+
+    //Bitcrush Processing
+    for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+    {
+        auto* channelData = buffer.getWritePointer(channel);
+
+        //Bit Reduction
+        bits = 2.0f;
+        wetDryFactor = 1.0f;
+        totalPossibleLevels = 1 << bits;          //Finds total possible bit combinations given bit rate
+        bitQuantization = 1.0f / static_cast<float>(totalPossibleLevels);    //Finds space between possible bit levels
+
+        for (int i = 0; i < buffer.getNumSamples(); ++i)
+        {
+            //Collects Dry Signal
+            dryData = channelData[i];
+            
+
+
+            
+
+            wetData = std::floor(channelData[i] / bitQuantization) * bitQuantization;      //Divides channel data among bit levels and quantizes to them
+            
+
+
+
+            //Sample Reduction
+            if (reductionFactor != 1)
+            {
+                if (i % reductionFactor != 0)
+                {
+                    wetData = channelData[i - (i % reductionFactor)];
+                }
+            }
+
+            channelData[i] = (1.0f - wetDryFactor) * dryData + wetDryFactor * wetData;     //Mixes Wet and dry signals together
+            //NOTE: This is not a simple wet dry mix as the sample rate reduction is acting on the mixed past data rather than the wet past data
+        }
+    }
+    
 }
 
 //==============================================================================

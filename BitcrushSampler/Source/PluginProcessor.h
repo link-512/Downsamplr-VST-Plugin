@@ -109,5 +109,25 @@ private:
     //ADSR
     juce::ADSR::Parameters ADSRParams;     //Sampler Envelope Parameters
 
+    
+    //Bit Reduction
+    int bits = 2.0f;       //Simulated Bit Level
+    int totalPossibleLevels;        //Total Possible values where a sample can be playing at a moment
+    float bitQuantization;          //Value used to quantize incoming sample rate into simulated bit level
+
+    //Sample Rate Reduction
+    int reductionFactor = 1;        //Reduction factor of how much sample rate is reduced
+
+
+    //Wet Dry Mix
+    float wetData;                  //Contains the value for the bitcrushed channelData at a given time
+    float dryData;                  //Dry channelData at a time
+    float wetDryFactor = 1.0f;     //Mix Balance
+
+
+
+    //Synth Rendering
+    juce::AudioSampleBuffer synthBuffer;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BitcrushSamplerAudioProcessor)
 };
