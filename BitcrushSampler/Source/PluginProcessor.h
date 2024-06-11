@@ -80,6 +80,18 @@ public:
 
     juce::AudioProcessorValueTreeState& getAPVTS() { return APVTS; };
 
+
+
+    //Delay Functions
+    void fillDelayBuffer(int channel, const int bufferLength, 
+        const int delayBufferLength, const float* bufferData, const float* delayBufferData);
+
+    void getFromDelayBuffer(juce::AudioBuffer<float>& buffer, int channel, 
+        const int bufferLength, const int delayBufferLength, const float* bufferData, const float* delayBufferData);
+
+    void feedbackDelay(int channel,
+        const int bufferLength, const int delayBufferLength, const float* dryBuffer);
+
 private:
     //==============================================================================
 
@@ -128,6 +140,14 @@ private:
 
     //Synth Rendering
     juce::AudioSampleBuffer synthBuffer;
+
+
+    //Delay Variables
+    juce::AudioBuffer<float> delayBuffer;      //Buffer that contains the delay data
+
+    int writePosition{ 0 };
+    int mSampleRate{ 44100 };
+
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BitcrushSamplerAudioProcessor)
 };

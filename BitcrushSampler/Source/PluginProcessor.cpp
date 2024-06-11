@@ -110,6 +110,17 @@ void BitcrushSamplerAudioProcessor::prepareToPlay (double sampleRate, int sample
     bits = APVTS.getRawParameterValue("BIT")->load();
     reductionFactor = APVTS.getRawParameterValue("SAMPLE")->load();
     wetDryFactor = APVTS.getRawParameterValue("PRESENCE")->load();
+
+
+
+    //Delay Buffer Setup
+    const int numInputChannels = getTotalNumInputChannels();
+    const int delayBufferSize = 2 * sampleRate + samplesPerBlock;
+
+    delayBuffer.setSize(2, delayBufferSize);
+    delayBuffer.clear();
+
+    mSampleRate = sampleRate;
 }
 
 void BitcrushSamplerAudioProcessor::releaseResources()
@@ -233,6 +244,30 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         }
     }
     
+    
+    //Delay Processing
+    const int bufferLength = buffer.getNumSamples();
+    const int delayBufferLength = delayBuffer.getNumSamples();
+
+    for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+    {
+
+
+        const float* bufferData = buffer.getReadPointer(channel);
+        const float* delayBufferData = delayBuffer.getReadPointer(channel);
+        float* dryBuffer = buffer.getWritePointer(channel);
+
+
+        fillDelayBuffer(channel, bufferLength, delayBufferLength, bufferData, delayBufferData);
+        getFromDelayBuffer(buffer, channel, bufferLength, delayBufferLength, bufferData, delayBufferData);
+        feedbackDelay(channel, bufferLength, delayBufferLength, dryBuffer);
+
+    }
+
+    writePosition += bufferLength;
+    writePosition %= delayBufferLength;
+
+    
 }
 
 //==============================================================================
@@ -351,4 +386,65 @@ juce::AudioProcessorValueTreeState::ParameterLayout BitcrushSamplerAudioProcesso
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("PRESENCE", "Presence", 0.0f, 1.0f, 1.0f));
 
     return { parameters.begin(), parameters.end() };
+}
+
+
+//Copys the base data to the delay buffer
+void BitcrushSamplerAudioProcessor::fillDelayBuffer(int channel, const int bufferLength, const int delayBufferLength, const float* bufferData, const float* delayBufferData)
+{
+    const float gain = 0.5;
+
+    //Copy from main to delay
+    if (delayBufferLength > bufferLength + writePosition)
+    {
+        delayBuffer.copyFromWithRamp(channel, writePosition, bufferData, bufferLength, gain, gain);
+    }
+
+    else
+    {
+        const int bufferRemaining = delayBufferLength - writePosition;
+
+        delayBuffer.copyFromWithRamp(channel, writePosition, bufferData, bufferRemaining, gain, gain);
+        delayBuffer.copyFromWithRamp(channel, 0, bufferData + bufferRemaining, bufferLength - bufferRemaining, gain, gain);
+    }
+}
+
+//Sends the delayed buffer back to the normal buffer for output
+void BitcrushSamplerAudioProcessor::getFromDelayBuffer(juce::AudioBuffer<float>& buffer, int channel,
+    const int bufferLength, const int delayBufferLength, const float* bufferData, const float* delayBufferData)
+{
+    int delayTime = 500;
+
+    const int readPosition = static_cast<int>(delayBufferLength + writePosition - (mSampleRate * delayTime / 1000)) % delayBufferLength;
+
+    if (delayBufferLength > bufferLength + readPosition)
+    {
+        buffer.addFrom(channel, 0, delayBufferData + readPosition, bufferLength);
+    }
+
+    else
+    {
+        const int bufferRemaining = delayBufferLength - readPosition;
+        buffer.addFrom(channel, 0, delayBufferData + readPosition, bufferRemaining);
+        buffer.addFrom(channel, bufferRemaining, delayBufferData, bufferLength - bufferRemaining);
+    }
+}
+
+//Sends the main buffer back to the delay to generate feedback
+void BitcrushSamplerAudioProcessor::feedbackDelay(int channel,
+    const int bufferLength, const int delayBufferLength, const float* dryBuffer)
+{
+    const float feedbackGain = 0.5f;
+
+    if (delayBufferLength > bufferLength + writePosition)
+    {
+        delayBuffer.addFromWithRamp(channel, writePosition, dryBuffer, bufferLength, feedbackGain, feedbackGain);
+    }
+
+    else
+    {
+        const int bufferRemaining = delayBufferLength - writePosition;
+        delayBuffer.addFromWithRamp(channel, writePosition, dryBuffer, bufferRemaining, feedbackGain, feedbackGain);
+        delayBuffer.addFromWithRamp(channel, 0, dryBuffer + bufferRemaining, bufferLength - bufferRemaining, feedbackGain, feedbackGain);
+    }
 }
