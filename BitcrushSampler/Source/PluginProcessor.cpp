@@ -217,7 +217,27 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     sampleSynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());       //Renders data with sampleSynth
     
 
+    //Delay Processing
+    const int bufferLength = buffer.getNumSamples();
+    const int delayBufferLength = delayBuffer.getNumSamples();
 
+    for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+    {
+
+
+        const float* bufferData = buffer.getReadPointer(channel);
+        const float* delayBufferData = delayBuffer.getReadPointer(channel);
+        float* dryBuffer = buffer.getWritePointer(channel);
+
+
+        fillDelayBuffer(channel, bufferLength, delayBufferLength, bufferData, delayBufferData);
+        getFromDelayBuffer(buffer, channel, bufferLength, delayBufferLength, bufferData, delayBufferData);
+        feedbackDelay(channel, bufferLength, delayBufferLength, dryBuffer);
+
+    }
+
+    writePosition += bufferLength;
+    writePosition %= delayBufferLength;
 
     //Bitcrush Processing
     for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
@@ -257,27 +277,7 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     }
     
     
-    //Delay Processing
-    const int bufferLength = buffer.getNumSamples();
-    const int delayBufferLength = delayBuffer.getNumSamples();
-
-    for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
-    {
-
-
-        const float* bufferData = buffer.getReadPointer(channel);
-        const float* delayBufferData = delayBuffer.getReadPointer(channel);
-        float* dryBuffer = buffer.getWritePointer(channel);
-
-
-        fillDelayBuffer(channel, bufferLength, delayBufferLength, bufferData, delayBufferData);
-        getFromDelayBuffer(buffer, channel, bufferLength, delayBufferLength, bufferData, delayBufferData);
-        feedbackDelay(channel, bufferLength, delayBufferLength, dryBuffer);
-
-    }
-
-    writePosition += bufferLength;
-    writePosition %= delayBufferLength;
+    
 
     
 }
