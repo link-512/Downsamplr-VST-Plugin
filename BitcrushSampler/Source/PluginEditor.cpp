@@ -11,7 +11,7 @@
 
 //==============================================================================
 BitcrushSamplerAudioProcessorEditor::BitcrushSamplerAudioProcessorEditor (BitcrushSamplerAudioProcessor& p)
-    : AudioProcessorEditor (&p), waveThumbnail (p), bitcrushUI(p), adsrKnobs (p), audioProcessor (p)
+    : AudioProcessorEditor (&p), waveThumbnail (p), bitcrushUI(p), delayUI(p), adsrKnobs (p), audioProcessor (p)
 {
     //Manual Load Button
     manualLoad.onClick = [&]() {audioProcessor.loadFile(); };
@@ -26,6 +26,9 @@ BitcrushSamplerAudioProcessorEditor::BitcrushSamplerAudioProcessorEditor (Bitcru
 
     //Bitcrush Knobs
     addAndMakeVisible(bitcrushUI);
+
+    //Delay UI
+    addAndMakeVisible(delayUI);
 
     //Start Timer
     startTimerHz(30);
@@ -51,6 +54,7 @@ void BitcrushSamplerAudioProcessorEditor::resized()
     waveThumbnail.setBounds(0,0, 400, 200);
     adsrKnobs.setBounds(0, 200, 300, 200);
     bitcrushUI.setBounds(300, 200, 225, 200);
+    delayUI.setBounds(525, 200, 300, 200);
 }
 
 //Repaints for playhead movement

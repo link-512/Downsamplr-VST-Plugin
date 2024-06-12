@@ -13,6 +13,7 @@
 #include "WaveThumbnail.h"
 #include "ADSRKnobs.h"
 #include "BitcrushUI.h"
+#include "DelayUI.h"
 
 //==============================================================================
 /**
@@ -43,7 +44,7 @@ private:
     WaveThumbnail waveThumbnail;
     ADSRKnobs adsrKnobs;
     BitcrushUI bitcrushUI;
-
+    DelayUI delayUI;
 
     //File Loading
     juce::TextButton manualLoad{ "Load" };

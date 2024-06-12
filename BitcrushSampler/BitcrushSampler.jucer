@@ -10,6 +10,8 @@
       <FILE id="S0RATq" name="ADSRKnobs.h" compile="0" resource="0" file="Source/ADSRKnobs.h"/>
       <FILE id="IocYDG" name="BitcrushUI.cpp" compile="1" resource="0" file="Source/BitcrushUI.cpp"/>
       <FILE id="LoHDO4" name="BitcrushUI.h" compile="0" resource="0" file="Source/BitcrushUI.h"/>
+      <FILE id="AwspNg" name="DelayUI.cpp" compile="1" resource="0" file="Source/DelayUI.cpp"/>
+      <FILE id="EnQV3r" name="DelayUI.h" compile="0" resource="0" file="Source/DelayUI.h"/>
       <FILE id="NNRE8Z" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="tMQvzu" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
