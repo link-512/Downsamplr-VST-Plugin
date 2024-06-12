@@ -30,6 +30,10 @@ DelayUI::DelayUI(BitcrushSamplerAudioProcessor& p) : audioProcessor(p)
     timeLabel.setJustificationType(juce::Justification::centredTop);
     timeLabel.attachToComponent(&timeSlider, false);
 
+    timeAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "DELAYTIME", timeSlider);
+
+
+    /*
     //Mix Slider
     mixSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     mixSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
@@ -41,6 +45,10 @@ DelayUI::DelayUI(BitcrushSamplerAudioProcessor& p) : audioProcessor(p)
     mixLabel.setJustificationType(juce::Justification::centredTop);
     mixLabel.attachToComponent(&mixSlider, false);
 
+    mixAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "DELAYMIX", mixSlider);
+
+
+    */
     //Feedback Slider
     feedbackSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     feedbackSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
@@ -51,6 +59,8 @@ DelayUI::DelayUI(BitcrushSamplerAudioProcessor& p) : audioProcessor(p)
     feedbackLabel.setText("Feedback", juce::NotificationType::dontSendNotification);
     feedbackLabel.setJustificationType(juce::Justification::centredTop);
     feedbackLabel.attachToComponent(&feedbackSlider, false);
+
+    feedbackAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "FEEDBACK", feedbackSlider);
 }
 
 DelayUI::~DelayUI()
@@ -72,6 +82,6 @@ void DelayUI::resized()
 
     timeSlider.setBounds(startX, startY, dialWidth, dialHeight);
     feedbackSlider.setBounds(startX + dialWidth, startY, dialWidth, dialHeight);
-    mixSlider.setBounds(startX + (dialWidth * 2), startY, dialWidth, dialHeight);
+    //mixSlider.setBounds(startX + (dialWidth * 2), startY, dialWidth, dialHeight);
 
 }

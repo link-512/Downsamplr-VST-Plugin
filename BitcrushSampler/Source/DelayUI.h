@@ -36,6 +36,11 @@ private:
     juce::Label mixLabel;
     juce::Label feedbackLabel;
 
+    //APVTS Control
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> timeAttatchment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mixAttatchment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> feedbackAttatchment;
+
 
     BitcrushSamplerAudioProcessor& audioProcessor;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DelayUI)

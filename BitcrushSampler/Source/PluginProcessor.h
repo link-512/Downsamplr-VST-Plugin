@@ -148,6 +148,10 @@ private:
     int writePosition{ 0 };
     int mSampleRate{ 44100 };
 
+    int delayTime;      //Time in between each loop of the delay
+    float delayMix;      //Gain of the delayed portion of the mix
+    float feedbackGain; //Amount of feedback
+
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BitcrushSamplerAudioProcessor)
 };

@@ -107,11 +107,16 @@ void BitcrushSamplerAudioProcessor::prepareToPlay (double sampleRate, int sample
 
     sampleSynth.setCurrentPlaybackSampleRate(sampleRate);     //Sets sample rate for sampler
     updateADSR();
+
+    //Bitcrush
     bits = APVTS.getRawParameterValue("BIT")->load();
     reductionFactor = APVTS.getRawParameterValue("SAMPLE")->load();
     wetDryFactor = APVTS.getRawParameterValue("PRESENCE")->load();
 
-
+    //Delay
+    delayTime = APVTS.getRawParameterValue("DELAYTIME")->load();
+    delayMix = APVTS.getRawParameterValue("DELAYMIX")->load();
+    feedbackGain = APVTS.getRawParameterValue("FEEDBACK")->load();
 
     //Delay Buffer Setup
     const int numInputChannels = getTotalNumInputChannels();
@@ -174,10 +179,17 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     if (shouldUpdate)
     {
         updateADSR();
+
+        //Bitcrush
         bits = APVTS.getRawParameterValue("BIT")->load();
         reductionFactor = APVTS.getRawParameterValue("SAMPLE")->load();
         wetDryFactor = APVTS.getRawParameterValue("PRESENCE")->load();
         shouldUpdate = false;
+
+        //Delay
+        delayTime = APVTS.getRawParameterValue("DELAYTIME")->load();
+        //delayMix = APVTS.getRawParameterValue("DELAYMIX")->load();
+        feedbackGain = APVTS.getRawParameterValue("FEEDBACK")->load();
     }
 
 
@@ -384,6 +396,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout BitcrushSamplerAudioProcesso
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("BIT", "Bit Rate", 1.0f, 31.999f, 31.999f));
     parameters.push_back(std::make_unique<juce::AudioParameterInt>("SAMPLE", "Sample Reduction", 1, 50, 1));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("PRESENCE", "Presence", 0.0f, 1.0f, 1.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("DELAYTIME", "Delay Time", 1, 1000, 200));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("DELAYMIX", "Delay Mix", 0.0f, 1.0f, 0.5f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("FEEDBACK", "Feedback", 0.0f, 1.0f, 0.5f));
 
     return { parameters.begin(), parameters.end() };
 }
@@ -392,20 +407,20 @@ juce::AudioProcessorValueTreeState::ParameterLayout BitcrushSamplerAudioProcesso
 //Copys the base data to the delay buffer
 void BitcrushSamplerAudioProcessor::fillDelayBuffer(int channel, const int bufferLength, const int delayBufferLength, const float* bufferData, const float* delayBufferData)
 {
-    const float gain = 0.5;
+    
 
     //Copy from main to delay
     if (delayBufferLength > bufferLength + writePosition)
     {
-        delayBuffer.copyFromWithRamp(channel, writePosition, bufferData, bufferLength, gain, gain);
+        delayBuffer.copyFromWithRamp(channel, writePosition, bufferData, bufferLength, delayMix, delayMix);
     }
 
     else
     {
         const int bufferRemaining = delayBufferLength - writePosition;
 
-        delayBuffer.copyFromWithRamp(channel, writePosition, bufferData, bufferRemaining, gain, gain);
-        delayBuffer.copyFromWithRamp(channel, 0, bufferData + bufferRemaining, bufferLength - bufferRemaining, gain, gain);
+        delayBuffer.copyFromWithRamp(channel, writePosition, bufferData, bufferRemaining, delayMix, delayMix);
+        delayBuffer.copyFromWithRamp(channel, 0, bufferData + bufferRemaining, bufferLength - bufferRemaining, delayMix, delayMix);
     }
 }
 
@@ -413,7 +428,6 @@ void BitcrushSamplerAudioProcessor::fillDelayBuffer(int channel, const int buffe
 void BitcrushSamplerAudioProcessor::getFromDelayBuffer(juce::AudioBuffer<float>& buffer, int channel,
     const int bufferLength, const int delayBufferLength, const float* bufferData, const float* delayBufferData)
 {
-    int delayTime = 500;
 
     const int readPosition = static_cast<int>(delayBufferLength + writePosition - (mSampleRate * delayTime / 1000)) % delayBufferLength;
 
@@ -434,7 +448,6 @@ void BitcrushSamplerAudioProcessor::getFromDelayBuffer(juce::AudioBuffer<float>&
 void BitcrushSamplerAudioProcessor::feedbackDelay(int channel,
     const int bufferLength, const int delayBufferLength, const float* dryBuffer)
 {
-    const float feedbackGain = 0.5f;
 
     if (delayBufferLength > bufferLength + writePosition)
     {
