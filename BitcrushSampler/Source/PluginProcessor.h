@@ -153,5 +153,11 @@ private:
     float feedbackGain; //Amount of feedback
 
     
+
+    //Reverb
+    juce::Reverb reverb;
+    juce::Reverb::Parameters reverbParams;
+
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BitcrushSamplerAudioProcessor)
 };

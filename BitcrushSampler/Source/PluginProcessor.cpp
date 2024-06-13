@@ -126,6 +126,11 @@ void BitcrushSamplerAudioProcessor::prepareToPlay (double sampleRate, int sample
     delayBuffer.clear();
 
     mSampleRate = sampleRate;
+
+
+    //Reverb Initialization
+    reverb.setSampleRate(sampleRate);
+    //Set Reverb Params Here
 }
 
 void BitcrushSamplerAudioProcessor::releaseResources()
@@ -276,7 +281,8 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         }
     }
     
-    
+    //Reverb
+    reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
     
 
     
