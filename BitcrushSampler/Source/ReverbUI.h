@@ -45,6 +45,11 @@ private:
     juce::Label feedbackLabel;
 
 
+    //Enable/Disable
+    juce::TextButton preEnable{ "Pre Bitcrush" };
+    juce::TextButton postEnable{ "Post Bitcrush" };
+
+
     BitcrushSamplerAudioProcessor& audioProcessor;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbUI)
 };

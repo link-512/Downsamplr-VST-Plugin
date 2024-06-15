@@ -96,6 +96,11 @@ ReverbUI::ReverbUI(BitcrushSamplerAudioProcessor& p) : audioProcessor(p)
 
     //timeAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "DELAYTIME", timeSlider);
 
+
+
+    //Buttons
+    addAndMakeVisible(preEnable);
+    addAndMakeVisible(postEnable);
 }
 
 ReverbUI::~ReverbUI()
@@ -126,4 +131,9 @@ void ReverbUI::resized()
     drySlider.setBounds(startX, startY + dialHeight + 25, dialWidth, dialHeight);
     wetSlider.setBounds(startX + dialWidth, startY + dialHeight + 25, dialWidth, dialHeight);
     widthSlider.setBounds(startX + (dialWidth * 2), startY + dialHeight + 25, dialWidth, dialHeight);
+
+
+    //Buttons
+    preEnable.setBounds(0, 260, getWidth(), 20);
+    postEnable.setBounds(0, 280, getWidth(), 20);
 }

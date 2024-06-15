@@ -53,6 +53,9 @@ BitcrushUI::BitcrushUI(BitcrushSamplerAudioProcessor& p) : audioProcessor (p)
     wetDryLabel.setJustificationType(juce::Justification::centredTop);
     wetDryLabel.attachToComponent(&wetDrySlider, false);
     
+
+    //Enable Button
+    addAndMakeVisible(enableButton);
 }
 
 BitcrushUI::~BitcrushUI()
@@ -76,4 +79,6 @@ void BitcrushUI::resized()
     sampleSlider.setBounds(startX + dialWidth, startY, dialWidth, dialHeight);
     wetDrySlider.setBounds(startX + (dialWidth * 2), startY, dialWidth, dialHeight);
 
+    //Enable Button
+    enableButton.setBounds(0, 280, getWidth(), 20);
 }

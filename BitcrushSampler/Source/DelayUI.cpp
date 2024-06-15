@@ -61,6 +61,10 @@ DelayUI::DelayUI(BitcrushSamplerAudioProcessor& p) : audioProcessor(p)
     feedbackLabel.attachToComponent(&feedbackSlider, false);
 
     feedbackAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "FEEDBACK", feedbackSlider);
+
+    //Enable Buttons
+    addAndMakeVisible(preEnable);
+    addAndMakeVisible(postEnable);
 }
 
 DelayUI::~DelayUI()
@@ -84,4 +88,8 @@ void DelayUI::resized()
     feedbackSlider.setBounds(startX + dialWidth, startY, dialWidth, dialHeight);
     //mixSlider.setBounds(startX + (dialWidth * 2), startY, dialWidth, dialHeight);
 
+
+    //Enable buttons
+    preEnable.setBounds(0, 260, getWidth(), 20);
+    postEnable.setBounds(0, 280, getWidth(), 20);
 }

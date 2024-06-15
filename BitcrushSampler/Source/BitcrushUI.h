@@ -42,6 +42,9 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> wetDrySliderAttatch;
 
 
+
+    //Enable button
+    juce::TextButton enableButton{ "Enable" };
     BitcrushSamplerAudioProcessor& audioProcessor;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BitcrushUI)
 };
