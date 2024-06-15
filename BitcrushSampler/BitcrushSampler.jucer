@@ -19,6 +19,8 @@
             file="Source/PluginProcessor.cpp"/>
       <FILE id="oIfPay" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
+      <FILE id="AVTHj5" name="ReverbUI.cpp" compile="1" resource="0" file="Source/ReverbUI.cpp"/>
+      <FILE id="CP6H3Y" name="ReverbUI.h" compile="0" resource="0" file="Source/ReverbUI.h"/>
       <FILE id="jtnmTj" name="WaveThumbnail.cpp" compile="1" resource="0"
             file="Source/WaveThumbnail.cpp"/>
       <FILE id="KxInIp" name="WaveThumbnail.h" compile="0" resource="0" file="Source/WaveThumbnail.h"/>

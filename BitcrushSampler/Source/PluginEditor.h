@@ -14,6 +14,7 @@
 #include "ADSRKnobs.h"
 #include "BitcrushUI.h"
 #include "DelayUI.h"
+#include "ReverbUI.h"
 
 //==============================================================================
 /**
@@ -45,6 +46,7 @@ private:
     ADSRKnobs adsrKnobs;
     BitcrushUI bitcrushUI;
     DelayUI delayUI;
+    ReverbUI reverbUI;
 
     //File Loading
     juce::TextButton manualLoad{ "Load" };
