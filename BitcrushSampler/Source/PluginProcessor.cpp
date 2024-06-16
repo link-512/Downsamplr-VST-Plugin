@@ -259,40 +259,45 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     writePosition += bufferLength;
     writePosition %= delayBufferLength;
 
-    //Bitcrush Processing
-    for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+
+
+    if (bitcrushEnabled)
     {
-        auto* channelData = buffer.getWritePointer(channel);
-
-        //Bit Reduction
-        totalPossibleLevels = 1 << bits;          //Finds total possible bit combinations given bit rate
-        bitQuantization = 1.0f / static_cast<float>(totalPossibleLevels);    //Finds space between possible bit levels
-
-        for (int i = 0; i < buffer.getNumSamples(); ++i)
+        //Bitcrush Processing
+        for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
         {
-            //Collects Dry Signal
-            dryData = channelData[i];
-            
+            auto* channelData = buffer.getWritePointer(channel);
 
+            //Bit Reduction
+            totalPossibleLevels = 1 << bits;          //Finds total possible bit combinations given bit rate
+            bitQuantization = 1.0f / static_cast<float>(totalPossibleLevels);    //Finds space between possible bit levels
 
-            
-
-            wetData = std::floor(channelData[i] / bitQuantization) * bitQuantization;      //Divides channel data among bit levels and quantizes to them
-            
-
-
-
-            //Sample Reduction
-            if (reductionFactor != 1)
+            for (int i = 0; i < buffer.getNumSamples(); ++i)
             {
-                if (i % reductionFactor != 0)
-                {
-                    wetData = channelData[i - (i % reductionFactor)];
-                }
-            }
+                //Collects Dry Signal
+                dryData = channelData[i];
 
-            channelData[i] = (1.0f - wetDryFactor) * dryData + wetDryFactor * wetData;     //Mixes Wet and dry signals together
-            //NOTE: This is not a simple wet dry mix as the sample rate reduction is acting on the mixed past data rather than the wet past data
+
+
+
+
+                wetData = std::floor(channelData[i] / bitQuantization) * bitQuantization;      //Divides channel data among bit levels and quantizes to them
+
+
+
+
+                //Sample Reduction
+                if (reductionFactor != 1)
+                {
+                    if (i % reductionFactor != 0)
+                    {
+                        wetData = channelData[i - (i % reductionFactor)];
+                    }
+                }
+
+                channelData[i] = (1.0f - wetDryFactor) * dryData + wetDryFactor * wetData;     //Mixes Wet and dry signals together
+                //NOTE: This is not a simple wet dry mix as the sample rate reduction is acting on the mixed past data rather than the wet past data
+            }
         }
     }
     

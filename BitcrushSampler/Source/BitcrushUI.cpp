@@ -55,6 +55,8 @@ BitcrushUI::BitcrushUI(BitcrushSamplerAudioProcessor& p) : audioProcessor (p)
     
 
     //Enable Button
+    enableButton.onClick = [&]() {enableButtonHit(); };
+    enableButton.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
     addAndMakeVisible(enableButton);
 }
 
@@ -81,4 +83,21 @@ void BitcrushUI::resized()
 
     //Enable Button
     enableButton.setBounds(0, 280, getWidth(), 20);
+}
+
+void BitcrushUI::enableButtonHit()
+{
+    audioProcessor.setBitcrushEnabled();
+
+    if (audioProcessor.getBitcrushEnabled())
+    {
+        enableButton.setColour(juce::TextButton::buttonColourId, juce::Colours::green);
+    }
+
+    else
+    {
+        enableButton.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
+    }
+
+    repaint();
 }

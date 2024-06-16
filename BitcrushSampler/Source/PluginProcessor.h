@@ -92,6 +92,17 @@ public:
     void feedbackDelay(int channel,
         const int bufferLength, const int delayBufferLength, const float* dryBuffer);
 
+
+    //Enable and Disable
+    void setBitcrushEnabled()
+    {
+        bitcrushEnabled = !bitcrushEnabled;
+    };
+
+    bool getBitcrushEnabled()
+    {
+        return bitcrushEnabled;
+    };
 private:
     //==============================================================================
 
@@ -158,6 +169,10 @@ private:
     juce::Reverb reverb;
     juce::Reverb::Parameters reverbParams;
 
+
+
+    //Effect Enable and Disable
+    bool bitcrushEnabled{ false };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BitcrushSamplerAudioProcessor)
 };
