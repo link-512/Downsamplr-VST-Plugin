@@ -25,7 +25,7 @@ ReverbUI::ReverbUI(BitcrushSamplerAudioProcessor& p) : audioProcessor(p)
     sizeLabel.setJustificationType(juce::Justification::centredTop);
     sizeLabel.attachToComponent(&sizeSlider, false);
 
-    //timeAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "DELAYTIME", timeSlider);
+    sizeAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "SIZE", sizeSlider);
 
     //Damping Slider
     dampingSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
@@ -38,7 +38,7 @@ ReverbUI::ReverbUI(BitcrushSamplerAudioProcessor& p) : audioProcessor(p)
     dampingLabel.setJustificationType(juce::Justification::centredTop);
     dampingLabel.attachToComponent(&dampingSlider, false);
 
-    //timeAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "DELAYTIME", timeSlider);
+    dampingAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "DAMPING", dampingSlider);
 
 
     //Dry Level Slider
@@ -52,7 +52,7 @@ ReverbUI::ReverbUI(BitcrushSamplerAudioProcessor& p) : audioProcessor(p)
     dryLabel.setJustificationType(juce::Justification::centredTop);
     dryLabel.attachToComponent(&drySlider, false);
 
-    //timeAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "DELAYTIME", timeSlider);
+    dryAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "DRYLEVEL", drySlider);
 
 
     //Wet Level Slider
@@ -66,7 +66,7 @@ ReverbUI::ReverbUI(BitcrushSamplerAudioProcessor& p) : audioProcessor(p)
     wetLabel.setJustificationType(juce::Justification::centredTop);
     wetLabel.attachToComponent(&wetSlider, false);
 
-    //timeAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "DELAYTIME", timeSlider);
+    wetAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "WETLEVEL", wetSlider);
 
 
     //Width Slider
@@ -80,21 +80,21 @@ ReverbUI::ReverbUI(BitcrushSamplerAudioProcessor& p) : audioProcessor(p)
     widthLabel.setJustificationType(juce::Justification::centredTop);
     widthLabel.attachToComponent(&widthSlider, false);
 
-    //timeAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "DELAYTIME", timeSlider);
+    widthAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "WIDTH", widthSlider);
 
 
     //Feedback Slider
     feedbackSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     feedbackSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
 
-    addAndMakeVisible(feedbackSlider);
+    //addAndMakeVisible(feedbackSlider);
 
     feedbackLabel.setFont(10.0f);
-    feedbackLabel.setText("Feedback", juce::NotificationType::dontSendNotification);
+    feedbackLabel.setText("Decay", juce::NotificationType::dontSendNotification);
     feedbackLabel.setJustificationType(juce::Justification::centredTop);
     feedbackLabel.attachToComponent(&feedbackSlider, false);
 
-    //timeAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "DELAYTIME", timeSlider);
+    //feedbackAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "REVERBDECAY", feedbackSlider);
 
 
 
@@ -124,13 +124,13 @@ void ReverbUI::resized()
     //First Layer
     sizeSlider.setBounds(startX, startY, dialWidth, dialHeight);
     dampingSlider.setBounds(startX + dialWidth, startY, dialWidth, dialHeight);
-    feedbackSlider.setBounds(startX + (dialWidth * 2), startY, dialWidth, dialHeight);
+    widthSlider.setBounds(startX + (dialWidth * 2), startY, dialWidth, dialHeight);
 
 
     //Second Layet
     drySlider.setBounds(startX, startY + dialHeight + 25, dialWidth, dialHeight);
     wetSlider.setBounds(startX + dialWidth, startY + dialHeight + 25, dialWidth, dialHeight);
-    widthSlider.setBounds(startX + (dialWidth * 2), startY + dialHeight + 25, dialWidth, dialHeight);
+    //widthSlider.setBounds(startX + (dialWidth * 2), startY + dialHeight + 25, dialWidth, dialHeight);
 
 
     //Buttons

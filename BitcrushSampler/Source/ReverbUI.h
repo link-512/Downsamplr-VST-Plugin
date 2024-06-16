@@ -50,6 +50,16 @@ private:
     juce::TextButton postEnable{ "Post Bitcrush" };
 
 
+
+    //APVTS Attatchments
+    //APVTS Attatchment
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> widthAttatchment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> feedbackAttatchment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> wetAttatchment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> dryAttatchment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> dampingAttatchment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sizeAttatchment;
+
     BitcrushSamplerAudioProcessor& audioProcessor;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbUI)
 };

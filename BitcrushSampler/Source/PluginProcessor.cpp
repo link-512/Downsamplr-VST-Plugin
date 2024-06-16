@@ -130,7 +130,13 @@ void BitcrushSamplerAudioProcessor::prepareToPlay (double sampleRate, int sample
 
     //Reverb Initialization
     reverb.setSampleRate(sampleRate);
-    //Set Reverb Params Here
+    reverbParams.roomSize = APVTS.getRawParameterValue("SIZE")->load();
+    reverbParams.damping = APVTS.getRawParameterValue("DAMPING")->load();
+    reverbParams.wetLevel = APVTS.getRawParameterValue("WETLEVEL")->load();
+    reverbParams.dryLevel = APVTS.getRawParameterValue("DRYLEVEL")->load();
+    reverbParams.width = APVTS.getRawParameterValue("WIDTH")->load();
+    reverbParams.freezeMode = APVTS.getRawParameterValue("REVERBDECAY")->load();
+    reverb.setParameters(reverbParams);
 }
 
 void BitcrushSamplerAudioProcessor::releaseResources()
@@ -195,6 +201,15 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         delayTime = APVTS.getRawParameterValue("DELAYTIME")->load();
         //delayMix = APVTS.getRawParameterValue("DELAYMIX")->load();
         feedbackGain = APVTS.getRawParameterValue("FEEDBACK")->load();
+
+        //Reverb
+        reverbParams.roomSize = APVTS.getRawParameterValue("SIZE")->load();
+        reverbParams.damping = APVTS.getRawParameterValue("DAMPING")->load();
+        reverbParams.wetLevel = APVTS.getRawParameterValue("WETLEVEL")->load();
+        reverbParams.dryLevel = APVTS.getRawParameterValue("DRYLEVEL")->load();
+        reverbParams.width = APVTS.getRawParameterValue("WIDTH")->load();
+        reverbParams.freezeMode = APVTS.getRawParameterValue("REVERBDECAY")->load();
+        reverb.setParameters(reverbParams);
     }
 
 
@@ -399,12 +414,24 @@ juce::AudioProcessorValueTreeState::ParameterLayout BitcrushSamplerAudioProcesso
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("DECAY", "Decay", 0.0f, 3.0f, 0.0f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("SUSTAIN", "Sustain", 0.0f, 1.0f, 1.0f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("RELEASE", "Release", 0.0f, 5.0f, 0.01f));
+
+    //Bitcrush
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("BIT", "Bit Rate", 1.0f, 31.999f, 31.999f));
     parameters.push_back(std::make_unique<juce::AudioParameterInt>("SAMPLE", "Sample Reduction", 1, 50, 1));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("PRESENCE", "Presence", 0.0f, 1.0f, 1.0f));
+
+    //Delay
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("DELAYTIME", "Delay Time", 1, 1000, 200));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("DELAYMIX", "Delay Mix", 0.0f, 1.0f, 0.5f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("FEEDBACK", "Feedback", 0.0f, 1.0f, 0.5f));
+
+    //Reverb
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("SIZE", "Size", 0.0f, 1.0f, 0.5f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("DAMPING", "Damping", 0.0f, 1.0f, 0.5f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("WETLEVEL", "Wet Level", 0.0f, 1.0f, 0.33f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("DRYLEVEL", "Dry Level", 0.0f, 1.0f, 0.4f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("WIDTH", "Width", 0.0f, 1.0f, 1.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("REVERBDECAY", " Reverb Decay", 0.0f, 0.5f, 0.2f));
 
     return { parameters.begin(), parameters.end() };
 }
