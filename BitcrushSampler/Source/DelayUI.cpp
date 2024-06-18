@@ -103,6 +103,14 @@ void DelayUI::resized()
 
 void DelayUI::preDelayHit()
 {
+    //Checks if postReverb is enabled to prevent feedback loop
+    if (audioProcessor.getPostDelayEnabled() && !audioProcessor.getPreDelayEnabled())
+    {
+        audioProcessor.setPostDelayEnabled();
+        postEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
+
+    }
+    
     audioProcessor.setPreDelayEnabled();
 
     if (audioProcessor.getPreDelayEnabled())
@@ -120,6 +128,14 @@ void DelayUI::preDelayHit()
 
 void DelayUI::postDelayHit()
 {
+    //Checks if preDelay is enabled to prevent feedback loop
+    if (audioProcessor.getPreDelayEnabled() && !audioProcessor.getPostDelayEnabled() || (audioProcessor.getPreDelayEnabled() && audioProcessor.getPostDelayEnabled()))
+    {
+        audioProcessor.setPreDelayEnabled();
+        preEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
+
+    }
+    
     audioProcessor.setPostDelayEnabled();
 
     if (audioProcessor.getPostDelayEnabled())

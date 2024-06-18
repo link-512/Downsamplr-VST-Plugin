@@ -177,7 +177,7 @@ void ReverbUI::preReverbHit()
 void ReverbUI::postReverbHit()
 {
     //Checks if preReverb is enabled to prevent feedback loop
-    if (audioProcessor.getPreReverbEnabled() && !audioProcessor.getPostReverbEnabled())
+    if (audioProcessor.getPreReverbEnabled() && !audioProcessor.getPostReverbEnabled() || (audioProcessor.getPreReverbEnabled() && audioProcessor.getPostReverbEnabled()))
     {
         audioProcessor.setPreReverbEnabled();
         preEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
