@@ -62,8 +62,15 @@ DelayUI::DelayUI(BitcrushSamplerAudioProcessor& p) : audioProcessor(p)
 
     feedbackAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "FEEDBACK", feedbackSlider);
 
-    //Enable Buttons
+
+    //preEnable Button
+    preEnable.onClick = [&]() {preDelayHit(); };
+    preEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
     addAndMakeVisible(preEnable);
+
+    //postEnable Button
+    postEnable.onClick = [&]() {postDelayHit(); };
+    postEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
     addAndMakeVisible(postEnable);
 }
 
@@ -92,4 +99,38 @@ void DelayUI::resized()
     //Enable buttons
     preEnable.setBounds(0, 260, getWidth(), 20);
     postEnable.setBounds(0, 280, getWidth(), 20);
+}
+
+void DelayUI::preDelayHit()
+{
+    audioProcessor.setPreDelayEnabled();
+
+    if (audioProcessor.getPreDelayEnabled())
+    {
+        preEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::green);
+    }
+
+    else
+    {
+        preEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
+    }
+
+    repaint();
+}
+
+void DelayUI::postDelayHit()
+{
+    audioProcessor.setPostDelayEnabled();
+
+    if (audioProcessor.getPostDelayEnabled())
+    {
+        postEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::green);
+    }
+
+    else
+    {
+        postEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
+    }
+
+    repaint();
 }

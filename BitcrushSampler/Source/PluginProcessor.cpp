@@ -238,27 +238,29 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     
 
     //Pre Delay Processing
-    const int bufferLength = buffer.getNumSamples();
-    const int delayBufferLength = delayBuffer.getNumSamples();
-
-    for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+    if (preDelayEnabled)
     {
+        const int bufferLength = buffer.getNumSamples();
+        const int delayBufferLength = delayBuffer.getNumSamples();
+
+        for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+        {
 
 
-        const float* bufferData = buffer.getReadPointer(channel);
-        const float* delayBufferData = delayBuffer.getReadPointer(channel);
-        float* dryBuffer = buffer.getWritePointer(channel);
+            const float* bufferData = buffer.getReadPointer(channel);
+            const float* delayBufferData = delayBuffer.getReadPointer(channel);
+            float* dryBuffer = buffer.getWritePointer(channel);
 
 
-        fillDelayBuffer(channel, bufferLength, delayBufferLength, bufferData, delayBufferData);
-        getFromDelayBuffer(buffer, channel, bufferLength, delayBufferLength, bufferData, delayBufferData);
-        feedbackDelay(channel, bufferLength, delayBufferLength, dryBuffer);
+            fillDelayBuffer(channel, bufferLength, delayBufferLength, bufferData, delayBufferData);
+            getFromDelayBuffer(buffer, channel, bufferLength, delayBufferLength, bufferData, delayBufferData);
+            feedbackDelay(channel, bufferLength, delayBufferLength, dryBuffer);
 
+        }
+
+        writePosition += bufferLength;
+        writePosition %= delayBufferLength;
     }
-
-    writePosition += bufferLength;
-    writePosition %= delayBufferLength;
-
 
 
     //Pre Reverb
@@ -308,6 +310,32 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         }
     }
     
+    //Post Delay Processing
+    if (postDelayEnabled)
+    {
+        const int bufferLength = buffer.getNumSamples();
+        const int delayBufferLength = delayBuffer.getNumSamples();
+
+        for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+        {
+
+
+            const float* bufferData = buffer.getReadPointer(channel);
+            const float* delayBufferData = delayBuffer.getReadPointer(channel);
+            float* dryBuffer = buffer.getWritePointer(channel);
+
+
+            fillDelayBuffer(channel, bufferLength, delayBufferLength, bufferData, delayBufferData);
+            getFromDelayBuffer(buffer, channel, bufferLength, delayBufferLength, bufferData, delayBufferData);
+            feedbackDelay(channel, bufferLength, delayBufferLength, dryBuffer);
+
+        }
+
+        writePosition += bufferLength;
+        writePosition %= delayBufferLength;
+    }
+
+
     //Post Reverb
     if (postReverbEnabled)
     {
