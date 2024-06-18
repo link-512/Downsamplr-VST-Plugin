@@ -237,7 +237,7 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     sampleSynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());       //Renders data with sampleSynth
     
 
-    //Delay Processing
+    //Pre Delay Processing
     const int bufferLength = buffer.getNumSamples();
     const int delayBufferLength = delayBuffer.getNumSamples();
 
@@ -261,9 +261,16 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
 
 
 
+    //Pre Reverb
+    if (preReverbEnabled)
+    {
+        reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
+    }
+
+    //Bitcrush Processing
     if (bitcrushEnabled)
     {
-        //Bitcrush Processing
+        
         for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
         {
             auto* channelData = buffer.getWritePointer(channel);
@@ -301,8 +308,11 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         }
     }
     
-    //Reverb
-    reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
+    //Post Reverb
+    if (postReverbEnabled)
+    {
+        reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
+    }
     
 
     

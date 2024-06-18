@@ -94,6 +94,7 @@ public:
 
 
     //Enable and Disable
+    //Bitcrush
     void setBitcrushEnabled()
     {
         bitcrushEnabled = !bitcrushEnabled;
@@ -103,6 +104,27 @@ public:
     {
         return bitcrushEnabled;
     };
+
+    //Reverb
+    void setPreReverbEnabled()
+    {
+        preReverbEnabled = !preReverbEnabled;
+    }
+
+    bool getPreReverbEnabled()
+    {
+        return preReverbEnabled;
+    }
+
+    void setPostReverbEnabled()
+    {
+        postReverbEnabled = !postReverbEnabled;
+    }
+
+    bool getPostReverbEnabled()
+    {
+        return postReverbEnabled;
+    }
 private:
     //==============================================================================
 
@@ -173,6 +195,9 @@ private:
 
     //Effect Enable and Disable
     bool bitcrushEnabled{ false };
+
+    bool preReverbEnabled{ false };
+    bool postReverbEnabled{ false };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BitcrushSamplerAudioProcessor)
 };

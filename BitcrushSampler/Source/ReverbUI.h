@@ -49,6 +49,8 @@ private:
     juce::TextButton preEnable{ "Pre Bitcrush" };
     juce::TextButton postEnable{ "Post Bitcrush" };
 
+    void preReverbHit();
+    void postReverbHit();
 
 
     //APVTS Attatchments

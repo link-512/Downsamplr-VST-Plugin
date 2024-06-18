@@ -99,7 +99,14 @@ ReverbUI::ReverbUI(BitcrushSamplerAudioProcessor& p) : audioProcessor(p)
 
 
     //Buttons
+    //preEnable Button
+    preEnable.onClick = [&]() {preReverbHit(); };
+    preEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
     addAndMakeVisible(preEnable);
+
+    //postEnableButton
+    postEnable.onClick = [&]() {postReverbHit(); };
+    postEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
     addAndMakeVisible(postEnable);
 }
 
@@ -136,4 +143,65 @@ void ReverbUI::resized()
     //Buttons
     preEnable.setBounds(0, 260, getWidth(), 20);
     postEnable.setBounds(0, 280, getWidth(), 20);
+}
+
+
+//When Pre reverb hit
+void ReverbUI::preReverbHit()
+{
+    //Checks if postReverb is enabled to prevent feedback loop
+    if (audioProcessor.getPostReverbEnabled() && !audioProcessor.getPreReverbEnabled())
+    {
+        audioProcessor.setPostReverbEnabled();
+        postEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
+
+    }
+    
+    
+    audioProcessor.setPreReverbEnabled();
+
+    if (audioProcessor.getPreReverbEnabled())
+    {
+        preEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::green);
+    }
+
+    else
+    {
+        preEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
+    }
+
+    repaint();
+}
+
+//When Post reverb hit
+void ReverbUI::postReverbHit()
+{
+    //Checks if preReverb is enabled to prevent feedback loop
+    if (audioProcessor.getPreReverbEnabled() && !audioProcessor.getPostReverbEnabled())
+    {
+        audioProcessor.setPreReverbEnabled();
+        preEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
+
+    }
+    
+    
+    //Enables post reverb
+    audioProcessor.setPostReverbEnabled();
+
+    if (audioProcessor.getPostReverbEnabled())
+    {
+        postEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::green);
+    }
+
+    else
+    {
+        postEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
+    }
+
+
+    
+    repaint();
+
+
+
 }
