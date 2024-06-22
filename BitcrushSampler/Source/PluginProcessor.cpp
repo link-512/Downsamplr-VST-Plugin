@@ -363,12 +363,26 @@ void BitcrushSamplerAudioProcessor::getStateInformation (juce::MemoryBlock& dest
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+
+
+    //Creates an Xml Element using all of the parameters of APVTS
+    std::unique_ptr<juce::XmlElement> xmlState(APVTS.state.createXml());
+
+    //Converts the element to binary
+    copyXmlToBinary(*xmlState, destData);
 }
 
 void BitcrushSamplerAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+
+    std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
+
+    if (xmlState != nullptr)
+    {
+        APVTS.state = juce::ValueTree::fromXml(*xmlState);
+    }
 }
 
 //==============================================================================
