@@ -137,6 +137,9 @@ void BitcrushSamplerAudioProcessor::prepareToPlay (double sampleRate, int sample
     reverbParams.width = APVTS.getRawParameterValue("WIDTH")->load();
     reverbParams.freezeMode = APVTS.getRawParameterValue("REVERBDECAY")->load();
     reverb.setParameters(reverbParams);
+
+    //Enabling and Disabling
+    bitcrushEnabled = APVTS.getRawParameterValue("BITCRUSHENABLED")->load();
 }
 
 void BitcrushSamplerAudioProcessor::releaseResources()
@@ -210,6 +213,9 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         reverbParams.width = APVTS.getRawParameterValue("WIDTH")->load();
         reverbParams.freezeMode = APVTS.getRawParameterValue("REVERBDECAY")->load();
         reverb.setParameters(reverbParams);
+
+        //Enabling and Disabling
+        bitcrushEnabled = APVTS.getRawParameterValue("BITCRUSHENABLED")->load();
     }
 
 
@@ -489,6 +495,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout BitcrushSamplerAudioProcesso
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("DRYLEVEL", "Dry Level", 0.0f, 1.0f, 0.4f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("WIDTH", "Width", 0.0f, 1.0f, 1.0f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("REVERBDECAY", " Reverb Decay", 0.0f, 0.5f, 0.2f));
+
+
+    //Enabling and Disabling
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("BITCRUSHENABLED", "Bitcrush Enable", false));
 
     return { parameters.begin(), parameters.end() };
 }

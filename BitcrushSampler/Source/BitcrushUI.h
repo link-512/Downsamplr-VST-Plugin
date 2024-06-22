@@ -45,7 +45,7 @@ private:
 
     //Enable button
     juce::TextButton enableButton{ "Enable" };
-
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> bitcrushEnableAttatch;
 
     void enableButtonHit();
 
