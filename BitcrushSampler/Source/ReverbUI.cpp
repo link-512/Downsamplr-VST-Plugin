@@ -99,15 +99,20 @@ ReverbUI::ReverbUI(BitcrushSamplerAudioProcessor& p) : audioProcessor(p)
 
 
     //Buttons
-    //preEnable Button
-    preEnable.onClick = [&]() {preReverbHit(); };
-    preEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
-    addAndMakeVisible(preEnable);
+    //reverbEnable Button
+    reverbEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
+    reverbEnableAttatch = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
+        (audioProcessor.getAPVTS(), "REVERBENABLED", reverbEnable);
+    reverbEnable.setClickingTogglesState(true);
+    addAndMakeVisible(reverbEnable);
 
     //postEnableButton
-    postEnable.onClick = [&]() {postReverbHit(); };
-    postEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
-    addAndMakeVisible(postEnable);
+    preReverbOn.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
+    preReverbOnAttatch = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
+        (audioProcessor.getAPVTS(), "PREBITCRUSHREVERB", preReverbOn);
+    preReverbOn.setClickingTogglesState(true);
+    preReverbOn.onClick = [&]() {preReverbHit(); };
+    addAndMakeVisible(preReverbOn);
 }
 
 ReverbUI::~ReverbUI()
@@ -141,67 +146,19 @@ void ReverbUI::resized()
 
 
     //Buttons
-    preEnable.setBounds(0, 260, getWidth(), 20);
-    postEnable.setBounds(0, 280, getWidth(), 20);
+    reverbEnable.setBounds(0, 260, getWidth(), 20);
+    preReverbOn.setBounds(0, 280, getWidth(), 20);
 }
 
-
-//When Pre reverb hit
 void ReverbUI::preReverbHit()
 {
-    //Checks if postReverb is enabled to prevent feedback loop
-    if (audioProcessor.getPostReverbEnabled() && !audioProcessor.getPreReverbEnabled())
+    if (preReverbOn.getButtonText().equalsIgnoreCase("Post Bitcrush"))
     {
-        audioProcessor.setPostReverbEnabled();
-        postEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
-
-    }
-    
-    
-    audioProcessor.setPreReverbEnabled();
-
-    if (audioProcessor.getPreReverbEnabled())
-    {
-        preEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::green);
+        preReverbOn.setButtonText("Pre Bitcrush");
     }
 
     else
     {
-        preEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
+        preReverbOn.setButtonText("Post Bitcrush");
     }
-
-    repaint();
-}
-
-//When Post reverb hit
-void ReverbUI::postReverbHit()
-{
-    //Checks if preReverb is enabled to prevent feedback loop
-    if (audioProcessor.getPreReverbEnabled() && !audioProcessor.getPostReverbEnabled() || (audioProcessor.getPreReverbEnabled() && audioProcessor.getPostReverbEnabled()))
-    {
-        audioProcessor.setPreReverbEnabled();
-        preEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
-
-    }
-    
-    
-    //Enables post reverb
-    audioProcessor.setPostReverbEnabled();
-
-    if (audioProcessor.getPostReverbEnabled())
-    {
-        postEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::green);
-    }
-
-    else
-    {
-        postEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
-    }
-
-
-    
-    repaint();
-
-
-
 }

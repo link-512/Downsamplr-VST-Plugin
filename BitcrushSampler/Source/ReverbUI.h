@@ -46,12 +46,13 @@ private:
 
 
     //Enable/Disable
-    juce::TextButton preEnable{ "Pre Bitcrush" };
-    juce::TextButton postEnable{ "Post Bitcrush" };
+    juce::TextButton reverbEnable{ "Enable" };
+    juce::TextButton preReverbOn{ "Pre Bitcrush" };
+
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> reverbEnableAttatch;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> preReverbOnAttatch;
 
     void preReverbHit();
-    void postReverbHit();
-
 
     //APVTS Attatchments
     //APVTS Attatchment

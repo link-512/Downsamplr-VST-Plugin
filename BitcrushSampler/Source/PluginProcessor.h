@@ -105,27 +105,6 @@ public:
         return bitcrushEnabled;
     };
 
-    //Reverb
-    void setPreReverbEnabled()
-    {
-        preReverbEnabled = !preReverbEnabled;
-    }
-
-    bool getPreReverbEnabled()
-    {
-        return preReverbEnabled;
-    }
-
-    void setPostReverbEnabled()
-    {
-        postReverbEnabled = !postReverbEnabled;
-    }
-
-    bool getPostReverbEnabled()
-    {
-        return postReverbEnabled;
-    }
-
     bool getPreDelayOn()
     {
         return preDelayOn;
@@ -201,8 +180,8 @@ private:
     //Effect Enable and Disable
     bool bitcrushEnabled{ false };
 
-    bool preReverbEnabled{ false };
-    bool postReverbEnabled{ false };
+    bool reverbEnabled{ false };
+    bool preReverbOn{ true };
 
 
     bool delayEnabled{ false };

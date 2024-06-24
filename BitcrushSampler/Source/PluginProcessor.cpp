@@ -142,6 +142,9 @@ void BitcrushSamplerAudioProcessor::prepareToPlay (double sampleRate, int sample
     bitcrushEnabled = APVTS.getRawParameterValue("BITCRUSHENABLED")->load();
     delayEnabled = APVTS.getRawParameterValue("DELAYENABLED")->load();
     preDelayOn = APVTS.getRawParameterValue("PREBITCRUSHDELAY")->load();
+
+    reverbEnabled = APVTS.getRawParameterValue("REVERBENABLED")->load();
+    preReverbOn = APVTS.getRawParameterValue("PREBITCRUSHREVERB")->load();
 }
 
 void BitcrushSamplerAudioProcessor::releaseResources()
@@ -221,6 +224,9 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
 
         delayEnabled = APVTS.getRawParameterValue("DELAYENABLED")->load();
         preDelayOn = APVTS.getRawParameterValue("PREBITCRUSHDELAY")->load();
+
+        reverbEnabled = APVTS.getRawParameterValue("REVERBENABLED")->load();
+        preReverbOn = APVTS.getRawParameterValue("PREBITCRUSHREVERB")->load();
     }
 
 
@@ -275,7 +281,7 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
 
 
     //Pre Reverb
-    if (preReverbEnabled)
+    if (reverbEnabled && preReverbOn)
     {
         reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
     }
@@ -348,7 +354,7 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
 
 
     //Post Reverb
-    if (postReverbEnabled)
+    if (reverbEnabled && !preReverbOn)
     {
         reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
     }
@@ -507,6 +513,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout BitcrushSamplerAudioProcesso
     
     parameters.push_back(std::make_unique<juce::AudioParameterBool>("DELAYENABLED", "Delay Enable", false));
     parameters.push_back(std::make_unique<juce::AudioParameterBool>("PREBITCRUSHDELAY", "Pre Bitcrush Delay", true));
+
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("REVERBENABLED", "Reverb Enable", false));
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("PREBITCRUSHREVERB", "Pre Bitcrush Reverb", true));
 
     return { parameters.begin(), parameters.end() };
 }
