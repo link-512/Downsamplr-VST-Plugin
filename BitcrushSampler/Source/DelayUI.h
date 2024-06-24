@@ -42,8 +42,12 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> feedbackAttatchment;
 
     //Enable/Disable
-    juce::TextButton preEnable{ "Pre Bitcrush" };
-    juce::TextButton postEnable{ "Post Bitcrush" };
+    juce::TextButton delayEnable{ "Enable" };
+    juce::TextButton preDelayOn{ "Pre Bitcrush" };
+
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> delayEnableAttatch;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> preDelayAttatch;
+
     void preDelayHit();
     void postDelayHit();
 

@@ -32,23 +32,6 @@ DelayUI::DelayUI(BitcrushSamplerAudioProcessor& p) : audioProcessor(p)
 
     timeAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "DELAYTIME", timeSlider);
 
-
-    /*
-    //Mix Slider
-    mixSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    mixSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
-
-    addAndMakeVisible(mixSlider);
-
-    mixLabel.setFont(10.0f);
-    mixLabel.setText("Mix", juce::NotificationType::dontSendNotification);
-    mixLabel.setJustificationType(juce::Justification::centredTop);
-    mixLabel.attachToComponent(&mixSlider, false);
-
-    mixAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "DELAYMIX", mixSlider);
-
-
-    */
     //Feedback Slider
     feedbackSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     feedbackSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
@@ -63,15 +46,20 @@ DelayUI::DelayUI(BitcrushSamplerAudioProcessor& p) : audioProcessor(p)
     feedbackAttatchment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "FEEDBACK", feedbackSlider);
 
 
-    //preEnable Button
-    preEnable.onClick = [&]() {preDelayHit(); };
-    preEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
-    addAndMakeVisible(preEnable);
+    //delayEnable Button
+    delayEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
+    delayEnableAttatch = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
+        (audioProcessor.getAPVTS(), "DELAYENABLED", delayEnable);
+    delayEnable.setClickingTogglesState(true);
+    addAndMakeVisible(delayEnable);
 
-    //postEnable Button
-    postEnable.onClick = [&]() {postDelayHit(); };
-    postEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
-    addAndMakeVisible(postEnable);
+    //preDelayOn Button
+    preDelayOn.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
+    preDelayAttatch = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
+        (audioProcessor.getAPVTS(), "PREBITCRUSHDELAY", preDelayOn);
+    preDelayOn.setClickingTogglesState(true);
+    preDelayOn.onClick = [&]() {preDelayHit(); };
+    addAndMakeVisible(preDelayOn);
 }
 
 DelayUI::~DelayUI()
@@ -97,56 +85,22 @@ void DelayUI::resized()
 
 
     //Enable buttons
-    preEnable.setBounds(0, 260, getWidth(), 20);
-    postEnable.setBounds(0, 280, getWidth(), 20);
+    delayEnable.setBounds(0, 260, getWidth(), 20);
+    preDelayOn.setBounds(0, 280, getWidth(), 20);
 }
 
 void DelayUI::preDelayHit()
 {
-    //Checks if postReverb is enabled to prevent feedback loop
-    if (audioProcessor.getPostDelayEnabled() && !audioProcessor.getPreDelayEnabled())
+    if (preDelayOn.getButtonText().equalsIgnoreCase("Post Bitcrush"))
     {
-        audioProcessor.setPostDelayEnabled();
-        postEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
-
-    }
-    
-    audioProcessor.setPreDelayEnabled();
-
-    if (audioProcessor.getPreDelayEnabled())
-    {
-        preEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::green);
+        preDelayOn.setButtonText("Pre Bitcrush");
     }
 
     else
     {
-        preEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
+        preDelayOn.setButtonText("Post Bitcrush");
     }
-
-    repaint();
 }
 
-void DelayUI::postDelayHit()
-{
-    //Checks if preDelay is enabled to prevent feedback loop
-    if (audioProcessor.getPreDelayEnabled() && !audioProcessor.getPostDelayEnabled() || (audioProcessor.getPreDelayEnabled() && audioProcessor.getPostDelayEnabled()))
-    {
-        audioProcessor.setPreDelayEnabled();
-        preEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
 
-    }
-    
-    audioProcessor.setPostDelayEnabled();
 
-    if (audioProcessor.getPostDelayEnabled())
-    {
-        postEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::green);
-    }
-
-    else
-    {
-        postEnable.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
-    }
-
-    repaint();
-}

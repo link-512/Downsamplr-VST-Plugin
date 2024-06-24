@@ -55,7 +55,6 @@ BitcrushUI::BitcrushUI(BitcrushSamplerAudioProcessor& p) : audioProcessor (p)
     
 
     //Enable Button
-    enableButton.onClick = [&]() {enableButtonHit(); };
     enableButton.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
     bitcrushEnableAttatch = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
         (audioProcessor.getAPVTS(), "BITCRUSHENABLED", enableButton);
@@ -88,35 +87,4 @@ void BitcrushUI::resized()
     enableButton.setBounds(0, 280, getWidth(), 20);
 }
 
-void BitcrushUI::enableButtonHit()
-{
-    //audioProcessor.setBitcrushEnabled();
-    /*
-    auto& apvts = audioProcessor.getAPVTS();
-    if (auto* parameter = apvts.getParameter("BITCRUSHENABLED"))
-    {
-        if (auto* boolParam = dynamic_cast<juce::AudioParameterBool*>(parameter))
-        {
-            bool newValue = !boolParam->get();
-            juce::MessageManager::callAsync([boolParam, newValue]() {
-                *boolParam = newValue;
-                });
-        }
-    }
-    */
 
-    
-    /*
-    if (audioProcessor.getBitcrushEnabled())
-    {
-        enableButton.setColour(juce::TextButton::buttonColourId, juce::Colours::green);
-    }
-
-    else
-    {
-        enableButton.setColour(juce::TextButton::buttonColourId, juce::Colours::darkgrey);
-    }
-
-    repaint();
-    */
-}

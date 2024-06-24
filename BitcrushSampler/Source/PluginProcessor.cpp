@@ -140,6 +140,8 @@ void BitcrushSamplerAudioProcessor::prepareToPlay (double sampleRate, int sample
 
     //Enabling and Disabling
     bitcrushEnabled = APVTS.getRawParameterValue("BITCRUSHENABLED")->load();
+    delayEnabled = APVTS.getRawParameterValue("DELAYENABLED")->load();
+    preDelayOn = APVTS.getRawParameterValue("PREBITCRUSHDELAY")->load();
 }
 
 void BitcrushSamplerAudioProcessor::releaseResources()
@@ -216,6 +218,9 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
 
         //Enabling and Disabling
         bitcrushEnabled = APVTS.getRawParameterValue("BITCRUSHENABLED")->load();
+
+        delayEnabled = APVTS.getRawParameterValue("DELAYENABLED")->load();
+        preDelayOn = APVTS.getRawParameterValue("PREBITCRUSHDELAY")->load();
     }
 
 
@@ -244,7 +249,7 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     
 
     //Pre Delay Processing
-    if (preDelayEnabled)
+    if (delayEnabled && preDelayOn)
     {
         const int bufferLength = buffer.getNumSamples();
         const int delayBufferLength = delayBuffer.getNumSamples();
@@ -317,7 +322,7 @@ void BitcrushSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     }
     
     //Post Delay Processing
-    if (postDelayEnabled)
+    if (delayEnabled && !preDelayOn)
     {
         const int bufferLength = buffer.getNumSamples();
         const int delayBufferLength = delayBuffer.getNumSamples();
@@ -499,6 +504,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout BitcrushSamplerAudioProcesso
 
     //Enabling and Disabling
     parameters.push_back(std::make_unique<juce::AudioParameterBool>("BITCRUSHENABLED", "Bitcrush Enable", false));
+    
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("DELAYENABLED", "Delay Enable", false));
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("PREBITCRUSHDELAY", "Pre Bitcrush Delay", true));
 
     return { parameters.begin(), parameters.end() };
 }

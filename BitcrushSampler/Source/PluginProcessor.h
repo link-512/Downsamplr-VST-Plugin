@@ -126,25 +126,9 @@ public:
         return postReverbEnabled;
     }
 
-    //Delay
-    void setPreDelayEnabled()
+    bool getPreDelayOn()
     {
-        preDelayEnabled = !preDelayEnabled;
-    }
-
-    bool getPreDelayEnabled()
-    {
-        return preDelayEnabled;
-    }
-
-    void setPostDelayEnabled()
-    {
-        postDelayEnabled = !postDelayEnabled;
-    }
-
-    bool getPostDelayEnabled()
-    {
-        return postDelayEnabled;
+        return preDelayOn;
     }
 private:
     //==============================================================================
@@ -221,7 +205,7 @@ private:
     bool postReverbEnabled{ false };
 
 
-    bool preDelayEnabled{ false };
-    bool postDelayEnabled{ false };
+    bool delayEnabled{ false };
+    bool preDelayOn{ true };
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BitcrushSamplerAudioProcessor)
 };
