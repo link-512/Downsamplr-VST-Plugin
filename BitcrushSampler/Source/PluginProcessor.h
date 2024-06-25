@@ -186,5 +186,9 @@ private:
 
     bool delayEnabled{ false };
     bool preDelayOn{ true };
+
+
+    //File Saving storage
+    juce::String mostRecentFile{ "" };
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BitcrushSamplerAudioProcessor)
 };

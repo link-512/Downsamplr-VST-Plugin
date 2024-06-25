@@ -385,6 +385,8 @@ void BitcrushSamplerAudioProcessor::getStateInformation (juce::MemoryBlock& dest
     //Creates an Xml Element using all of the parameters of APVTS
     std::unique_ptr<juce::XmlElement> xmlState(APVTS.state.createXml());
 
+    xmlState->setAttribute("fileName", mostRecentFile);
+
     //Converts the element to binary
     copyXmlToBinary(*xmlState, destData);
 }
@@ -398,8 +400,18 @@ void BitcrushSamplerAudioProcessor::setStateInformation (const void* data, int s
 
     if (xmlState != nullptr)
     {
+        //Loads file
+        if (xmlState->getStringAttribute("fileName").isNotEmpty())
+        {
+            loadFile(xmlState->getStringAttribute("fileName"));
+        }
+
+
+
         APVTS.state = juce::ValueTree::fromXml(*xmlState);
     }
+
+    
 }
 
 //==============================================================================
@@ -420,6 +432,7 @@ void BitcrushSamplerAudioProcessor::loadFile()
     {
         auto file = chooser.getResult();
         fileName = file.getFileNameWithoutExtension();
+        mostRecentFile = file.getFullPathName();
 
         formatReader = formatManager.createReaderFor(file);
 
@@ -441,6 +454,7 @@ void BitcrushSamplerAudioProcessor::loadFile(const juce::String& path)
 
     auto file = juce::File(path);
     fileName = file.getFileNameWithoutExtension();
+    mostRecentFile = file.getFullPathName();
 
     formatReader = formatManager.createReaderFor(file);
 
