@@ -36,7 +36,7 @@ BitcrushSamplerAudioProcessorEditor::BitcrushSamplerAudioProcessorEditor (Bitcru
     //Start Timer
     startTimerHz(30);
 
-    setSize (1000, 500);
+    setSize (900, 500);
 }
 
 BitcrushSamplerAudioProcessorEditor::~BitcrushSamplerAudioProcessorEditor()

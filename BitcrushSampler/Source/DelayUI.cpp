@@ -69,6 +69,8 @@ DelayUI::~DelayUI()
 void DelayUI::paint (juce::Graphics& g)
 {
     g.fillAll(juce::Colours::blue);
+    g.setColour(juce::Colours::white);
+    g.drawFittedText("Delay", getLocalBounds(), juce::Justification::centred, 1);
 }
 
 void DelayUI::resized()

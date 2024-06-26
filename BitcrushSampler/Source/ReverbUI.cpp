@@ -122,6 +122,9 @@ ReverbUI::~ReverbUI()
 void ReverbUI::paint (juce::Graphics& g)
 {
     g.fillAll(juce::Colours::darkblue);
+    g.setColour(juce::Colours::white);
+    
+    g.drawSingleLineText("Reverb", getWidth() / 2 - g.getCurrentFont().getStringWidth("Rev"), 240, juce::Justification::left);
 }
 
 void ReverbUI::resized()

@@ -96,7 +96,7 @@ bool WaveThumbnail::isInterestedInFileDrag(const juce::StringArray& files)
 {
     for (auto file : files)
     {
-        if (file.contains(".wav") || file.contains(".mp3") || file.contains(".aif"))
+        if (file.contains(".wav") || file.contains(".aif"))
         {
             return true;
         }

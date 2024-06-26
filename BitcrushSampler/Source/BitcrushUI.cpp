@@ -69,6 +69,9 @@ BitcrushUI::~BitcrushUI()
 void BitcrushUI::paint (juce::Graphics& g)
 {
     g.fillAll(juce::Colours::red);
+
+    g.setColour(juce::Colours::white);
+    g.drawFittedText("Bitcrush", getLocalBounds(), juce::Justification::centred, 1);
 }
 
 void BitcrushUI::resized()

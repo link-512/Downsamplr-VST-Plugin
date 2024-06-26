@@ -441,7 +441,7 @@ void BitcrushSamplerAudioProcessor::loadFile()
         waveform.setSize(1, static_cast<int>(formatReader->lengthInSamples));
         formatReader->read(&waveform, 0, static_cast<int>(formatReader->lengthInSamples), 0, true, false);
 
-        sampleSynth.addSound(new juce::SamplerSound("Sample", *formatReader, range, 60, 0.1, 0.1, 10.0));
+        sampleSynth.addSound(new juce::SamplerSound("Sample", *formatReader, range, 60, 0.1, 0.1, 20.0));
         
     }
     
@@ -464,7 +464,7 @@ void BitcrushSamplerAudioProcessor::loadFile(const juce::String& path)
     waveform.setSize(1, static_cast<int>(formatReader->lengthInSamples));
     formatReader->read(&waveform, 0, static_cast<int>(formatReader->lengthInSamples), 0, true, false);
 
-    sampleSynth.addSound(new juce::SamplerSound("Sample", *formatReader, range, 60, 0.1, 0.1, 10.0));
+    sampleSynth.addSound(new juce::SamplerSound("Sample", *formatReader, range, 60, 0.1, 0.1, 20.0));
 
     //updateADSR();
 }
