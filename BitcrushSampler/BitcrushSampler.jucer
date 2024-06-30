@@ -3,7 +3,8 @@
 <JUCERPROJECT id="Xax0Uj" name="BitcrushSampler" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
               pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
-              defines="JUCE_MODAL_LOOPS_PERMITTED=1">
+              defines="JUCE_MODAL_LOOPS_PERMITTED=1" pluginName="Downsamplr"
+              pluginDesc="VST Bitcrushing Sampler" pluginManufacturer="Nathan Link">
   <MAINGROUP id="eORU56" name="BitcrushSampler">
     <GROUP id="{31F12366-A747-A99C-06BB-F02620C7616E}" name="Source">
       <FILE id="xS4s3e" name="ADSRKnobs.cpp" compile="1" resource="0" file="Source/ADSRKnobs.cpp"/>
