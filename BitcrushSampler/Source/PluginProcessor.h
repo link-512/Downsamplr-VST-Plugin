@@ -115,7 +115,7 @@ private:
 
     //File Reading and Playback
     juce::Synthesiser sampleSynth;      //Synth for audio playback
-    const int numVoices = { 5 };        //Number of voices within synth
+    const int numVoices = { 7 };        //Number of voices within synth
     juce::AudioFormatManager formatManager;  //Format Manager for reading files
     juce::AudioFormatReader* formatReader{ nullptr };       //Format Reader for reading files
     juce::BigInteger range; //Midi Range
