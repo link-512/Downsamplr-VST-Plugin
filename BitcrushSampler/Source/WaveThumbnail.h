@@ -38,6 +38,10 @@ private:
 
     //Waveform generation
     std::vector<float> mAudioPoints;
+
+
+    //Indicator Colour
+    juce::Colour waveformColour;
     BitcrushSamplerAudioProcessor& audioProcessor;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WaveThumbnail)
 };

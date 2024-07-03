@@ -29,6 +29,18 @@ void WaveThumbnail::paint (juce::Graphics& g)
     auto waveform = audioProcessor.getWaveform();
     juce::Path p;
 
+
+    //Sets Colour
+    if (audioProcessor.isNotePlayed())
+    {
+        waveformColour = juce::Colours::green;
+    }
+
+    else
+    {
+        waveformColour = juce::Colours::white;
+    }
+
     if (waveform.getNumSamples() > 0)
     {
 
@@ -45,7 +57,7 @@ void WaveThumbnail::paint (juce::Graphics& g)
             mAudioPoints.push_back(buffer[sample]);
         }
 
-        g.setColour(juce::Colours::yellow);
+        g.setColour(waveformColour);
         p.startNewSubPath(0, getHeight() / 2);
 
         //Scales on y axis
@@ -61,10 +73,10 @@ void WaveThumbnail::paint (juce::Graphics& g)
         auto playHeadPosition = juce::jmap<int>(audioProcessor.getSampleCount(), 0, audioProcessor.getWaveform().getNumSamples(), 0, getWidth());
 
         g.setColour(juce::Colours::white);
-        g.drawLine(playHeadPosition, 0, playHeadPosition, getHeight(), 2.0f);
+        //g.drawLine(playHeadPosition, 0, playHeadPosition, getHeight(), 2.0f);
 
-        g.setColour(juce::Colours::black.withAlpha(0.2f));
-        g.fillRect(0, 0, playHeadPosition, getHeight());
+        //g.setColour(juce::Colours::black.withAlpha(0.2f));
+        //g.fillRect(0, 0, playHeadPosition, getHeight());
 
     }
 
